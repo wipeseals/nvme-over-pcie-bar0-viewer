@@ -34,9 +34,12 @@
                     <textarea id="binaryInput" rows="12" class="w-full p-4 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-mono transition duration-150" placeholder="Paste data in the format: 00000000: ff 3f 01 14 30 00 00 00 ..."></textarea>
                 </div>
                 
-                <div class="text-center">
+                <div class="text-center space-x-4">
                     <button id="parseButton" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 ease-in-out">
                         Parse
+                    </button>
+                    <button id="shareButton" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 ease-in-out">
+                        Share
                     </button>
                 </div>
             </div>
@@ -51,6 +54,7 @@
         // --- DOM Element Acquisition ---
         const binaryInputElement = document.getElementById('binaryInput');
         const parseButtonElement = document.getElementById('parseButton');
+        const shareButtonElement = document.getElementById('shareButton');
         const resultContainerElement = document.getElementById('resultContainer');
         
         // --- Initial Data Setup ---
@@ -70,10 +74,91 @@
 000000d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 000000e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 000000f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00`;
-        binaryInputElement.value = initialData;
+        
+        // Load data from URL parameter if available, otherwise use default
+        if (!loadFromUrl()) {
+            binaryInputElement.value = initialData;
+        }
+
+        // --- URL Parameter Handling ---
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function setUrlParameter(name, value) {
+            const url = new URL(window.location);
+            if (value) {
+                url.searchParams.set(name, value);
+            } else {
+                url.searchParams.delete(name);
+            }
+            window.history.replaceState({}, '', url);
+        }
+
+        function encodeBinaryData(data) {
+            try {
+                return btoa(data).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+            } catch (e) {
+                console.error('Failed to encode binary data:', e);
+                return '';
+            }
+        }
+
+        function decodeBinaryData(encoded) {
+            try {
+                // Add back padding if needed
+                const padding = '='.repeat((4 - encoded.length % 4) % 4);
+                const normalized = encoded.replace(/-/g, '+').replace(/_/g, '/') + padding;
+                return atob(normalized);
+            } catch (e) {
+                console.error('Failed to decode binary data:', e);
+                return '';
+            }
+        }
+
+        function generateShareUrl() {
+            const currentData = binaryInputElement.value.trim();
+            if (!currentData) return window.location.origin + window.location.pathname;
+            
+            const encoded = encodeBinaryData(currentData);
+            const url = new URL(window.location.origin + window.location.pathname);
+            url.searchParams.set('data', encoded);
+            return url.toString();
+        }
+
+        function loadFromUrl() {
+            const encodedData = getUrlParameter('data');
+            if (encodedData) {
+                const decodedData = decodeBinaryData(encodedData);
+                if (decodedData) {
+                    binaryInputElement.value = decodedData;
+                    return true;
+                }
+            }
+            return false;
+        }
 
         // --- Event Listener Setup ---
         parseButtonElement.addEventListener('click', parseAndDisplay);
+        shareButtonElement.addEventListener('click', function() {
+            const shareUrl = generateShareUrl();
+            navigator.clipboard.writeText(shareUrl).then(function() {
+                // Show a temporary success message
+                const originalText = shareButtonElement.textContent;
+                shareButtonElement.textContent = 'Copied!';
+                shareButtonElement.classList.remove('bg-green-600', 'hover:bg-green-700');
+                shareButtonElement.classList.add('bg-green-800');
+                setTimeout(function() {
+                    shareButtonElement.textContent = originalText;
+                    shareButtonElement.classList.remove('bg-green-800');
+                    shareButtonElement.classList.add('bg-green-600', 'hover:bg-green-700');
+                }, 2000);
+            }).catch(function(err) {
+                // Fallback: show the URL in a prompt
+                prompt('Share this URL:', shareUrl);
+            });
+        });
 
         function parseAndDisplay() {
             const rawText = binaryInputElement.value;
