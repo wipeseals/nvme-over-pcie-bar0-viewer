@@ -1,0 +1,7 @@
+node_modules/
+dist/
+web/nvme-parser.js
+*.log
+.DS_Store
+.vscode/
+.idea/
