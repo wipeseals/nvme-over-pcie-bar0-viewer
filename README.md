@@ -33,13 +33,13 @@ npx nvme-bar0-viewer --help
 
 ```bash
 npm install -g nvme-bar0-viewer
-nvmebar0v --help
+nvme-bar0-viewer --help
 ```
 
 ### Package Information
 
 - **NPM Package**: [nvme-bar0-viewer](https://www.npmjs.com/package/nvme-bar0-viewer)
-- **Binary Name**: `nvmebar0v`
+- **Binary Name**: `nvme-bar0-viewer`
 - **Releases**: Automated via GitHub releases
 - **CI/CD**: Automatically published to NPM on release
 
