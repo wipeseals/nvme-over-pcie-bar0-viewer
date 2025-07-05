@@ -1,13 +1,13 @@
 # NVMe BAR0 Space Parser
 
-[![Deploy static content to Pages](https://github.com/wipeseals/nvme-over-pcie-bar0-viewer/actions/workflows/static.yml/badge.svg?branch=master)](https://github.com/wipeseals/nvme-over-pcie-bar0-viewer/actions/workflows/static.yml)
-[![CI](https://github.com/wipeseals/nvme-over-pcie-bar0-viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/wipeseals/nvme-over-pcie-bar0-viewer/actions/workflows/ci.yml)
+[![Deploy static content to Pages](https://github.com/wipeseals/nvme-bar0-viewer/actions/workflows/static.yml/badge.svg?branch=master)](https://github.com/wipeseals/nvme-bar0-viewer/actions/workflows/static.yml)
+[![CI](https://github.com/wipeseals/nvme-bar0-viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/wipeseals/nvme-bar0-viewer/actions/workflows/ci.yml)
 
 Parse and validate NVMe Controller Registers from BAR0 space dumps. Available as both web interface and CLI tool.
 
 ## 🌐 Web Interface
 
-<https://wipeseals.github.io/nvme-over-pcie-bar0-viewer/>
+<https://wipeseals.github.io/nvme-bar0-viewer/>
 
 ## 📦 CLI Installation & Usage
 
@@ -83,8 +83,8 @@ Raw binary files containing NVMe register data are automatically detected and pa
 ### Building from Source
 
 ```bash
-git clone https://github.com/wipeseals/nvme-over-pcie-bar0-viewer.git
-cd nvme-over-pcie-bar0-viewer
+git clone https://github.com/wipeseals/nvme-bar0-viewer.git
+cd nvme-bar0-viewer
 npm install
 npm run build
 
