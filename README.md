@@ -1,4 +1,4 @@
-# NVMe BAR0 Space Parser
+# NVMe BAR0 Parser & Viewer
 
 [![Deploy static content to Pages](https://github.com/wipeseals/nvme-bar0-viewer/actions/workflows/static.yml/badge.svg?branch=master)](https://github.com/wipeseals/nvme-bar0-viewer/actions/workflows/static.yml)
 [![CI](https://github.com/wipeseals/nvme-bar0-viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/wipeseals/nvme-bar0-viewer/actions/workflows/ci.yml)
