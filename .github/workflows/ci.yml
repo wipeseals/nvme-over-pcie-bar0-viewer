@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - run: npm ci
+    
+    - run: npm run build
+    
+    - run: npm test
+    
+    - name: Test CLI functionality
+      run: |
+        # Test CLI help
+        node dist/cli.js --help
+        
+        # Test CLI with sample data
+        echo "00000000: ff ff 03 3c 30 00 00 00 00 04 01 00 00 00 00 00
+        00000010: 00 00 00 00 01 40 46 00 00 00 00 00 09 00 00 00
+        00000020: 00 00 00 00 1f 00 1f 00 00 c0 a4 ff 00 00 00 00
+        00000030: 00 d0 a4 ff 00 00 00 00 00 00 00 00 00 00 00 00" | node dist/cli.js --json | jq .registers[0].name
+        
+    - name: Test web build
+      run: npm run bundle:web
+      
+    - name: Verify web bundle exists
+      run: test -f web/nvme-parser.js

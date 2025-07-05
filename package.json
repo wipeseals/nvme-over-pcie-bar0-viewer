@@ -1,0 +1,47 @@
+{
+  "name": "nvme-bar0-viewer",
+  "version": "1.0.0",
+  "description": "Parse and validate NVMe Controller Registers from BAR0 space dumps",
+  "main": "dist/index.js",
+  "bin": {
+    "nvmebar0v": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:web": "npm run build && npm run bundle:web",
+    "bundle:web": "esbuild src/core.ts --bundle --format=iife --global-name=NVMeParser --outfile=web/nvme-parser.js",
+    "test": "jest",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist/",
+    "web/",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "nvme",
+    "pcie",
+    "bar0",
+    "registers",
+    "parser",
+    "cli"
+  ],
+  "author": "wipeseals",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wipeseals/nvme-over-pcie-bar0-viewer.git"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.0.0",
+    "@types/node": "^20.0.0",
+    "esbuild": "^0.19.0",
+    "jest": "^29.0.0",
+    "ts-jest": "^29.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
